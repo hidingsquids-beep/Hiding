@@ -23,11 +23,11 @@ Use the user's system side when provided. Otherwise infer from page ratio. If st
 
 | System side | Recommended viewport |
 | --- | --- |
-| 商管 Web 工作台 | 1440 x 900 |
+| Web 工作台 | 1440 x 900 |
 | 后台管理系统 | 1440 x 900 |
-| 销售商 APP | 390 x 844 |
+| APP | 390 x 844 |
 | 小程序 | 390 x 844 |
-| PDA / 司机端 | 390 x 844 |
+| PDA  | 390 x 844 |
 | 平板端 | 1024 x 768 |
 
 ## Page Traversal
