@@ -23,6 +23,17 @@ Use this checklist before final delivery.
 - [ ] Dynamic form linkages are captured: changing applicable scope, merchant type, level, category, station, or similar controls records the downstream matrix/table/field changes.
 - [ ] Operation steps are executable by a new user without oral explanation.
 
+## Deep Interaction Coverage
+
+- [ ] A page/interaction coverage queue was created before writing the manual.
+- [ ] All low-risk secondary entries were opened when accessible: detail, view, logs, rules/help, tabs, expand/collapse, pagination, sorting, filter, and reset.
+- [ ] At least one safe sample was opened for each visible typical admin entry type in scope: new/add, edit, detail, configuration, logs/rules, copy, approval, association/binding/selection, drawer, and modal.
+- [ ] New/add/edit/configuration/copy entries were not skipped only because Save or Submit exists.
+- [ ] Each opened secondary page, drawer, and modal has a screenshot or a precise blocker reason.
+- [ ] Each entry records execution status: `已实际操作`, `仅打开查看`, `已填写但未提交`, `已切换并复原`, `因缺少用户输入被阻断`, `因高风险未执行`, `因权限不足未执行`, or `待确认`.
+- [ ] Unopened safe entries are listed with a concrete reason, not a vague `无法验证`.
+- [ ] Empty list states were captured; safe reset/filter changes or user test-object requests were attempted before ending collection.
+
 ## Training Usability
 
 - [ ] The manual explains what to click, what to fill, what to choose, and what happens after saving or submitting.
@@ -36,6 +47,7 @@ Use this checklist before final delivery.
 - [ ] Live admin URL tasks record the capture method, final URL after redirects, and login or permission state.
 - [ ] Low-risk interactions that were executed are separated from medium-risk actions that were only previewed or filled without persistence.
 - [ ] High-risk data changes such as save, submit, delete, approve, publish, import, export, batch operation, and status change were not executed without explicit user confirmation.
+- [ ] Opening an edit/new/configuration/approval page is distinguished from actually saving, submitting, approving, or changing status.
 - [ ] If the user gave scoped high-risk authorization, the authorized scope, affected temporary/test object, executed actions, and cleanup result are documented.
 - [ ] Unconfirmed high-risk actions are listed as `待确认` and are not described as verified results.
 - [ ] Real data sensitivity is noted when screenshots include customer, merchant, financial, credential, or other sensitive information.
@@ -48,6 +60,10 @@ Use this checklist before final delivery.
 - [ ] Unshown rules are not invented.
 - [ ] Every behavior claim is supported by visible evidence, user material, or a pending-confirmation note.
 - [ ] Unclear interactions are listed as `待确认`.
+- [ ] Blocking fields were converted into user questions instead of being treated as immediate failure.
+- [ ] Blocking input questions state current page/modal, needed field, why it is needed, whether data can change, and whether Save/Submit will be clicked.
+- [ ] After the user supplied a blocking field, the original verification chain continued from the current page or nearest stable entry.
+- [ ] If the user did not provide the field, the path is marked `因缺少用户输入被阻断` and the affected operation is listed in pending items.
 - [ ] Inaccessible pages explain the access blocker.
 - [ ] Missing login credentials are handled without bypassing permissions.
 - [ ] Static or non-clickable Axure interactions are documented as static evidence.
@@ -82,6 +98,8 @@ Use this shape after creating or updating manual files:
 - Markdown 结构和标题层级
 - 截图引用路径
 - 页面、字段、按钮、状态、异常覆盖
+- 页面操作覆盖表、二级页面/抽屉/弹窗说明
+- 阻断类输入记录、高风险动作未执行记录
 - 待确认项标注
 - 真实后台采集方式、登录/权限状态、Chrome 标签释放/保留结果
 - 已执行交互与未执行高风险操作

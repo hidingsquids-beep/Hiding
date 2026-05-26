@@ -23,11 +23,11 @@ Use the user's system side when provided. Otherwise infer from page ratio. If st
 
 | System side | Recommended viewport |
 | --- | --- |
-| Web 工作台 | 1440 x 900 |
+| 商管 Web 工作台 | 1440 x 900 |
 | 后台管理系统 | 1440 x 900 |
-| APP | 390 x 844 |
+| 销售商 APP | 390 x 844 |
 | 小程序 | 390 x 844 |
-| PDA  | 390 x 844 |
+| PDA / 司机端 | 390 x 844 |
 | 平板端 | 1024 x 768 |
 
 ## Page Traversal
@@ -38,18 +38,33 @@ Use the user's system side when provided. Otherwise infer from page ratio. If st
 4. Visit each business page and wait until it is stable before capturing evidence.
 5. For long pages or scrollable regions, capture a full-page screenshot or clear sectional screenshots.
 6. Capture important states: default page, modal, drawer, dropdown, tab switch, step progression, empty state, permission restriction, validation error, success feedback, and failure feedback.
-7. Build a control coverage inventory for the requested scope: every visible toolbar button, row action, dropdown, checkbox/radio group, switch, date picker, tab, expandable region, matrix/table control, and copy/duplicate entry should be clicked, opened, or explicitly marked as static/pending.
-8. For forms with dependent configuration regions, capture before/after states when selections change downstream fields, table columns, matrix rows, validation text, disabled states, or default values.
-9. Keep traversal bounded to the user's requested module or the clearly relevant sitemap branch unless the user asks for a full-prototype manual.
+7. Build a deep exploration queue for the requested scope: list page, filter/reset, pagination/sorting, row detail, row edit, new/add, copy, more actions, rules/logs/configuration, approval, association/binding/selection, drawers, modals, tabs, and secondary pages.
+8. Build a control coverage inventory for the requested scope: every visible toolbar button, row action, dropdown, checkbox/radio group, switch, date picker, tab, expandable region, matrix/table control, and copy/duplicate entry should be clicked, opened, or explicitly marked as static/pending.
+9. For forms with dependent configuration regions, capture before/after states when selections change downstream fields, table columns, matrix rows, validation text, disabled states, or default values.
+10. Do not skip add/edit/copy/configuration pages just because they contain Save or Submit. In Axure, open these states when clickable and capture fields, defaults, required marks, footer buttons, validation prompts, close behavior, and screenshots.
+11. Keep traversal bounded to the user's requested module or the clearly relevant sitemap branch unless the user asks for a full-prototype manual.
 
 ## Evidence Map
 
 Keep a compact working map before writing the manual:
 
-| Page | Source | Captured state | Screenshot | Confidence | Pending issue |
-| --- | --- | --- | --- | --- | --- |
+| Page | Source | Captured state | Entry | Risk | Execution status | Screenshot | Confidence | Pending issue |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 Use `High` when the behavior was directly observed, `Medium` when it is visible but not interacted with, and `Pending` when the source is incomplete. Only `High` or user-confirmed items should be written as final behavior.
+
+## Deep Interaction Exploration Policy
+
+For Axure prototypes, treat every visible navigation item, toolbar button, row action, more menu, dropdown menu, card, tab, expand/collapse item, linked text, drawer trigger, and modal trigger as a possible state.
+
+| Risk | Prototype examples | Capture rule |
+| --- | --- | --- |
+| Low | detail, view, expand, tab, filter, reset, pagination, sorting, logs, rules/help | Click directly and screenshot. |
+| Medium | new/add, edit, copy, configuration, approval page before final submit, import/export dialog | Open and interact up to the visible submit/save boundary. Capture fields, required marks, defaults, validation, and footer buttons. |
+| High | prototype state that represents save success, submit success, delete confirmation, approve/reject, publish, enable/disable, import/export confirmation | Capture only if the prototype safely simulates the state. If the source represents a real linked system or unclear persistence, mark pending or ask user. |
+| Blocking Input | prototype requires order number, seller/store/product ID or name, phone number, test account, station/city/category, or another business object to reveal the next state | Ask the user for the minimum test value and resume the same prototype path after the reply. |
+
+For every secondary page, drawer, or modal, record entry name, entry location, opened title, page type, major fields, required marks, default values, options, footer buttons, close behavior, unsaved-change prompt, screenshot filename, risk level, and execution status.
 
 ## Screenshot Rules
 
@@ -146,6 +161,7 @@ Try to collect core interaction states when available:
 - Date/time picker, upload control, switch on/off.
 - Dynamic matrix/table changes after selecting merchant type, level, category, station, scope, or similar configuration controls.
 - Permission denied, disabled operation, empty data, loading, and exception states.
+- New/add, edit, copy, configuration, approval, rules, logs, association, binding, selection, and detail entries. At least open one safe sample for each visible type in the requested module.
 
 For dynamic controls, document at least the visible user-facing change. Examples: `未选择商户类型时矩阵暂无数据`, `选择创业者后矩阵新增创业者行`, `取消 C级/D级 后矩阵列同步减少`. If the prototype does not expose the underlying rule, mark the rule as `待确认`.
 
@@ -162,11 +178,23 @@ For each core function, summarize:
 相关截图:
 ```
 
+## Blocking Input Recovery
+
+If a prototype flow needs a specific test value before showing the next state:
+
+1. Do not invent the value or skip the flow.
+2. Ask the user for the smallest required field and name the current page/drawer/modal.
+3. State whether the prototype action is only simulated or could touch a real linked system.
+4. After the user replies, continue from the current prototype state when possible; otherwise return to the latest stable page and re-open the same path.
+5. If the user does not provide the value, mark the entry as `因缺少用户输入被阻断` and add it to pending items.
+
 ## Edge Cases
 
 - **Prototype cannot open**: check path, local server need, resource loss, browser security, and missing entry file. If still blocked, write the source into pending items.
 - **Login required**: use user-provided test credentials only. Do not bypass permission. Document accessible pages and mark blocked pages pending.
 - **Interaction not clickable**: check for hotspots. If still static, document visible page state and mark missing interaction pending.
+- **Clickable entry not opened**: record the specific reason, such as missing hotspot, broken link, permission gate, unsafe real-system action, or unresolved blocking input.
+- **Blocking input required**: ask for the needed field and resume after the user replies; do not mark the whole prototype flow as impossible immediately.
 - **Long page**: use full-page screenshot first; if unreadable, split into top/middle/bottom screenshots.
 - **Multiple platforms**: separate Web and APP chapters. Do not mix operation steps. Use Web verbs such as "点击"; use mobile verbs such as "点击", "滑动", "返回", and "下拉刷新".
 - **No sitemap**: manually collect reachable navigation and page links from the visible prototype shell, then mark sitemap absence in pending items.

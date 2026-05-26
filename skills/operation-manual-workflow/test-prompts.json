@@ -23,5 +23,20 @@
     "id": 5,
     "prompt": "使用 Chrome 打开 https://dev-admin.taodaji.com.cn/merchant/strategyManagement/timePhasedList，在策略名称输入 东湖店铺分时入库策略，点击查询，并读取查询结果。",
     "expected": "Skill should use the Chrome plugin / user's Chrome session, set the 策略名称 query condition, click 查询, verify the filtered result includes 策略名称=东湖店铺分时入库策略, 适用站点=东湖站勿动, 适用主营类目=BZ100, and finalize Chrome tabs without changing data."
+  },
+  {
+    "id": 6,
+    "prompt": "我提供一个真实后台 URL，请生成操作手册。点击“新增”后出现抽屉，必填字段包含订单号；当前页面没有可用订单号。",
+    "expected": "Skill should open the 新增 drawer, capture its title/fields/buttons/screenshot, identify 订单号 as a blocking input, ask the user for a test order number with current location and no-save boundary, continue the same verification chain after the user provides it, and record the flow as 已填写但未提交 unless save is explicitly authorized."
+  },
+  {
+    "id": 7,
+    "prompt": "我提供一个真实后台列表页，行操作里有“编辑”。请采集编辑页并写入操作手册，但不要修改真实数据。",
+    "expected": "Skill should click 编辑 into the page/drawer, screenshot fields/defaults/footer buttons, optionally switch non-persistent controls and restore them, avoid clicking 保存, and record 保存 as 因高风险未执行 instead of claiming save success."
+  },
+  {
+    "id": 8,
+    "prompt": "我进入某后台模块后列表为空，但页面上有筛选条件、重置、查询和新增入口。请生成该模块操作手册。",
+    "expected": "Skill should capture the empty state, try reset or safe filter changes, ask whether the user can provide a test object or filter condition if the list remains empty, still inspect safe new/add or help/config entries to their boundary, and avoid producing a complete verified list-operation manual from only the empty list."
   }
 ]

@@ -1,6 +1,6 @@
 ---
 name: operation-manual-workflow
-description: Create training-ready operation manuals from live admin URLs, Axure prototypes, local prototype packages, screenshots, page materials, or business notes. Use when the user asks for 操作手册, 用户手册, 培训手册, 后台系统操作手册, 真实后台链接制册, 管理后台页面采集, Chrome 插件采集, 在线系统操作说明, Axure 原型生成手册, 页面操作说明, 上线培训材料, 保存/提交前确认, field/button/state instructions, exhaustive button/dropdown/checkbox coverage, configuration linkage, or step-by-step business operation documentation.
+description: Create training-ready operation manuals from live admin URLs, Axure prototypes, screenshots, or business notes. Use for 操作手册, 用户手册, 培训手册, 后台系统操作手册, 真实后台链接制册, Chrome 插件采集, Axure 原型生成手册, 二级页面/抽屉/弹窗深度探查, 阻断字段问询恢复, 保存/提交前确认, field/button/state coverage, configuration linkage, or step-by-step business operation documentation.
 ---
 
 # Operation Manual Workflow
@@ -40,9 +40,31 @@ When the user provides a live admin URL or real business system link, read `refe
 - Treat every visible action control as a candidate evidence target: buttons, links, row actions, dropdowns, radio groups, checkboxes, switches, date pickers, steppers, tabs, expand/collapse controls, upload/import/export entries, and copy/duplicate actions.
 - Capture dynamic form behavior, especially when a selection changes downstream fields, table columns, matrix rows, validation text, disabled states, or default values.
 - Do not invent validation rules, permissions, status meanings, error messages, or irreversible behavior that the prototype or user material does not show.
+- Do not write a complete manual from only a main page, first-level menu, or list screenshot when clickable entries exist. Build a page/interaction coverage queue first, then write.
+- Enter secondary pages and states to their safe boundary: detail, edit, new/add, copy, configuration, approval, rules, logs, association, bind/select, drawer, modal, tab, and more-menu entries.
+- Do not skip add/edit/copy/configuration pages only because they contain Save or Submit. Open them, capture fields/defaults/buttons/validation, and stop before persistence unless authorized.
+- When a required business input blocks progress, ask the user for the minimum needed test value and resume the same verification chain after the user replies.
 - On live systems, low-risk interactions such as navigation, filtering, reset, pagination, sorting, tab switch, opening details, and opening edit pages may be simulated directly.
 - On live systems, high-risk data changes such as save, submit, delete, approve, publish, import, export sensitive data, batch operation, or status change require explicit user confirmation before execution. If the user explicitly authorizes a scoped high-risk workflow for the current module or test object, execute authorized actions within that scope without asking again for each click; keep actions on temporary/test records when possible and document the exact scope. If confirmation is absent, do not perform the action; document it as `待确认`.
 - Mark gaps as `待确认`, especially missing clicks, unclear field constraints, absent errors, login blocks, inaccessible pages, and incomplete states.
+
+## Deep Interaction Exploration Policy
+
+- Treat visible navigation entries, toolbar buttons, row actions, more menus, dropdown menus, cards, tabs, expand/collapse controls, drawers, modals, and linked text as potential page states.
+- Classify each entry before acting:
+  - `Low`: detail, view, expand, tab, filter, reset, pagination, sorting, logs, rules, help. Open directly and screenshot.
+  - `Medium`: new/add, edit, configuration, import/export dialog, copy page, approval page before final decision. Open, fill, switch, preview, and capture evidence, but do not persist.
+  - `High`: save, submit, delete, approve/reject, publish, enable/disable, batch operation, import confirmation, export sensitive data. Ask for explicit authorization.
+  - `Blocking Input`: a required business object is missing. Ask the user for the exact field and resume after receiving it.
+- For each secondary page, drawer, or modal, record entry name, entry location, title, major fields, required marks, defaults, options, footer buttons, close method, unsaved-change confirmation, screenshot filename, risk level, and execution status.
+
+## Blocking Input Recovery Policy
+
+- Do not fabricate, skip, or abandon a core flow when it needs a business identifier or test object.
+- Blocking fields include order number, document number, seller ID/name, store ID/name, product ID/name, phone number, contract number, settlement/payment/audit number, test account, test subject, business date, station, city, category, or similar required object.
+- Ask the smallest necessary question in this shape: `当前流程已进入【页面/抽屉/弹窗名称】，继续验证需要填写【字段名】。请提供一个可用于测试的【字段类型】；我收到后将继续从当前步骤验证，不会直接跳过该流程。当前不会点击保存/提交，除非你明确授权。`
+- After the user replies, continue from the current page when possible. If the page session is lost, return to the latest stable entry and continue the same verification path.
+- If the user refuses or does not provide the value, mark the path as `因缺少用户输入被阻断` and add a pending item naming the missing field and affected operation.
 
 ## Workflow
 
@@ -64,7 +86,8 @@ When the user provides a live admin URL or real business system link, read `refe
    - For Axure URLs or packages, follow `references/axure-manual-workflow.md`.
    - For screenshots or static notes, identify page names, visible regions, fields, buttons, states, and operation paths from the supplied material.
    - Maintain a lightweight evidence map while working: page, source, URL, captured state, interaction action, screenshot filename, risk level, confirmation status, confidence, and pending issue.
-   - Build a control coverage inventory before writing: list every visible button, link, row operation, dropdown, checkbox, radio, switch, date control, tab, expandable area, and matrix/table configuration control; mark each as `已实际操作`, `仅打开查看`, `已填写但未提交`, `因权限/风险未执行`, or `待确认`.
+   - Build a deep exploration queue before writing: list list page, filters, pagination/sorting, row detail, row edit, add/new, copy, more actions, rules/logs/configuration entries, drawers, modals, tabs, and secondary pages.
+   - Build a control coverage inventory before writing: list every visible button, link, row operation, dropdown, checkbox, radio, switch, date control, tab, expandable area, and matrix/table configuration control; mark each as `已实际操作`, `仅打开查看`, `已填写但未提交`, `已切换并复原`, `因缺少用户输入被阻断`, `因高风险未执行`, `因权限不足未执行`, or `待确认`.
    - For configuration forms, deliberately test representative selection changes and validation states: no option selected, one option selected, multiple options selected, option removed, and restoring the safe/default state. Capture before/after evidence when downstream regions change.
    - For copy/duplicate, import/export, batch, status, approval, and delete controls, at least open or document the entry. Execute the persistent result only when authorized and scoped.
    - Record inaccessible pages, broken assets, login requirements, and non-clickable interactions in the pending list.
@@ -93,6 +116,7 @@ When the user provides a live admin URL or real business system link, read `refe
 - Avoid PRD language that discusses internal system implementation.
 - Avoid vague claims like "系统自动处理" unless the prototype or user material shows the result.
 - Clearly distinguish "已实际操作", "仅打开查看", "已填写但未提交", and "因高风险未执行".
+- Also distinguish "已切换并复原", "因缺少用户输入被阻断", "因权限不足未执行", and "待确认".
 - Use `待确认` instead of filling unknown business rules.
 
 ## Reference Files
